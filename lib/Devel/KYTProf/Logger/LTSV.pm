@@ -2,6 +2,11 @@ package Devel::KYTProf::Logger::LTSV;
 use strict;
 use warnings;
 
+sub new {
+	my ($class, %args) = @_; 
+	bless {label => $$, %args}, $class; 
+}
+
 sub _escape ($) {
     my $s = $_[0];
     $s =~ s{([\x00-\x1F\x5C\x7F-\x9F])}{sprintf '\\%02X', ord $1}ge;
@@ -18,6 +23,7 @@ sub log {
         [caller_package => $args{package}],
         [caller_file_name => $args{file}],
         [caller_line => $args{line}],
+        [label => $class->{label}],
         map { [$_ => $args{data}->{$_}] } keys %{$args{data}},
     ;
     print "\n";
